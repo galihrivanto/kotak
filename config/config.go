@@ -1,11 +1,16 @@
 package config
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/spf13/viper"
 )
+
+type configKey struct{}
+
+var contextKey = configKey{}
 
 // Logger configuration
 type Logger struct {
@@ -23,6 +28,10 @@ type Database struct {
 	Database string `mapstructure:"database" yaml:"database"`
 }
 
+func (d Database) DSN() string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", d.Host, d.Port, d.Username, d.Password, d.Database)
+}
+
 // HttpServer configuration
 type HttpServer struct {
 	Port     string `mapstructure:"port" yaml:"port"`
@@ -34,10 +43,13 @@ type HttpServer struct {
 
 // SmtpServer configuration
 type SmtpServer struct {
+	AppName  string `mapstructure:"app_name" yaml:"app_name"`
+	Hostname string `mapstructure:"hostname" yaml:"hostname"`
 	Host     string `mapstructure:"host" yaml:"host"`
 	Port     string `mapstructure:"port" yaml:"port"`
 	Username string `mapstructure:"username" yaml:"username"`
 	Password string `mapstructure:"password" yaml:"password"`
+	MaxSize  int    `mapstructure:"max_size" yaml:"max_size"`
 }
 
 // Config is the configuration for the application
@@ -81,4 +93,14 @@ func Load(vars ...string) *Config {
 	}
 
 	return config
+}
+
+// FromContext returns the Config instance from the context
+func FromContext(ctx context.Context) *Config {
+	return ctx.Value(contextKey).(*Config)
+}
+
+// WithContext returns a new context with the Config instance
+func WithContext(ctx context.Context, config *Config) context.Context {
+	return context.WithValue(ctx, contextKey, config)
 }

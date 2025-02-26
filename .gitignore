@@ -1,0 +1,7 @@
+# binaries
+kotak
+
+# config
+config.yaml
+
+docker/.data
