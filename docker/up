@@ -1,0 +1,6 @@
+#! /bin/bash -e
+
+docker compose \
+	--project-name packform \
+	--file docker/docker-compose.yml \
+	up --detach --remove-orphans

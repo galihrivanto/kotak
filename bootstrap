@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+docker/up
+
+echo "Installing server dependencies..."
+go mod download
+echo "Building server..."
+go build -o kotak
