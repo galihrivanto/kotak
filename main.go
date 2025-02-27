@@ -6,7 +6,6 @@ import (
 
 	"github.com/galihrivanto/kotak/cli"
 	"github.com/galihrivanto/kotak/config"
-	"github.com/galihrivanto/kotak/db"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +16,7 @@ var rootCmd = &cobra.Command{
 
 func main() {
 	rootCmd.AddCommand(cli.ServerCmd)
+	rootCmd.AddCommand(cli.SendEmailCmd)
 
 	rootCmd.PersistentFlags().StringP("config", "c", "./config.yaml", "Config file (default is ./config.yaml)")
 
@@ -26,20 +26,6 @@ func main() {
 		c := config.Load(rootCmd.Flag("config").Value.String())
 		cmd.SetContext(config.WithContext(cmd.Context(), c))
 
-		// setup database
-		fmt.Println("Setting up database...")
-		dbInstance, err := db.New(c.Database)
-		if err != nil {
-			rootCmd.Print(err)
-			os.Exit(1)
-		}
-		cmd.SetContext(db.WithContext(cmd.Context(), dbInstance))
-	}
-
-	rootCmd.PersistentPostRun = func(cmd *cobra.Command, args []string) {
-		// teardown database
-		fmt.Println("Closing database...")
-		db.FromContext(cmd.Context()).Close()
 	}
 
 	if err := rootCmd.Execute(); err != nil {
