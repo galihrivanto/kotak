@@ -41,7 +41,8 @@ type HttpServer struct {
 	KeyFile  string `mapstructure:"key_file" yaml:"key_file"`
 
 	// API configuration
-	BaseAPI string `mapstructure:"base_api" yaml:"base_api"`
+	APIHost string `mapstructure:"api_host" yaml:"api_host"`
+	APIBase string `mapstructure:"api_base" yaml:"api_base"`
 
 	// Static file configuration
 	StaticDir string `mapstructure:"static_dir" yaml:"static_dir"`

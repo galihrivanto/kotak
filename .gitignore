@@ -4,4 +4,10 @@ kotak
 # config
 config.yaml
 
+# docker
 docker/.data
+
+# frontend
+frontend/dist
+frontend/tsconfig.tsbuildinfo
+node_modules

@@ -22,10 +22,12 @@ func main() {
 
 	rootCmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
 		// load config
+		fmt.Println("Loading configuration...")
 		c := config.Load(rootCmd.Flag("config").Value.String())
 		cmd.SetContext(config.WithContext(cmd.Context(), c))
 
 		// setup database
+		fmt.Println("Setting up database...")
 		dbInstance, err := db.New(c.Database)
 		if err != nil {
 			rootCmd.Print(err)

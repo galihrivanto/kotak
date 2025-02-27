@@ -26,7 +26,7 @@ func (s *Server) Start(ctx context.Context) error {
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	address := fmt.Sprintf("%s:%s", s.cfg.HttpServer.Host, s.cfg.HttpServer.Port)
 
-	fmt.Println("Setup API with base API", s.cfg.HttpServer.BaseAPI)
+	fmt.Println("Setup API with base API", s.cfg.HttpServer.APIBase)
 	s.setupAPI()
 
 	fmt.Println("Setup Static with static URL", s.cfg.HttpServer.StaticURL)
@@ -48,7 +48,7 @@ func (s *Server) Start(ctx context.Context) error {
 }
 
 func (s *Server) setupAPI() {
-	api := s.srv.Group(s.cfg.HttpServer.BaseAPI)
+	api := s.srv.Group(s.cfg.HttpServer.APIBase)
 
 	// Account routes
 	api.POST("/accounts", s.createAccount)
