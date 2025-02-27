@@ -36,9 +36,16 @@ func (d Database) DSN() string {
 type HttpServer struct {
 	Port     string `mapstructure:"port" yaml:"port"`
 	Host     string `mapstructure:"host" yaml:"host"`
-	SSL      bool   `mapstructure:"ssl" yaml:"ssl"`
+	TLS      bool   `mapstructure:"tls" yaml:"tls"`
 	CertFile string `mapstructure:"cert_file" yaml:"cert_file"`
 	KeyFile  string `mapstructure:"key_file" yaml:"key_file"`
+
+	// API configuration
+	BaseAPI string `mapstructure:"base_api" yaml:"base_api"`
+
+	// Static file configuration
+	StaticDir string `mapstructure:"static_dir" yaml:"static_dir"`
+	StaticURL string `mapstructure:"static_url" yaml:"static_url"`
 }
 
 // SmtpServer configuration

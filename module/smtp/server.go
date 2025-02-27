@@ -26,21 +26,17 @@ type Server struct {
 func (s *Server) Start(ctx context.Context) error {
 	s.ctx, s.cancel = context.WithCancel(ctx)
 
-	// Channel to signal server start
-	ready := make(chan struct{})
-
 	// Start the server
 	go func() {
 		addr := fmt.Sprintf("%s:%s", s.config.SmtpServer.Host, s.config.SmtpServer.Port)
 		ln, err := net.Listen("tcp", addr)
 		if err != nil {
 			log.Printf("SMTP server listen error: %v", err)
-			close(ready)
+
 			return
 		}
 
-		log.Printf("SMTP server listening on %s", addr)
-		close(ready)
+		fmt.Printf("\nSMTP server listening on %s", addr)
 
 		err = s.srv.Serve(ln)
 		if err != nil {
@@ -48,24 +44,11 @@ func (s *Server) Start(ctx context.Context) error {
 		}
 	}()
 
-	// Wait for server to start or context to cancel
-	select {
-	case <-ready:
-		// Server started
-	case <-ctx.Done():
-		// Context cancelled before server started
-		return ctx.Err()
-	}
-
-	// Wait for context cancellation (shutdown signal)
-	<-s.ctx.Done()
-
-	s.cancel()
-
 	return nil
 }
 
 func (s *Server) Close() error {
+	fmt.Println("Stopping SMTP server")
 	// stop server
 	s.cancel()
 
