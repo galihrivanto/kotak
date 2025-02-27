@@ -32,6 +32,9 @@ func Start(ctx context.Context, cfg *config.Config, db *db.DB) error {
 		}
 		moduleInstance[name] = module
 	}
+
+	<-ctx.Done()
+
 	return nil
 }
 

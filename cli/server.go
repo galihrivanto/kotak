@@ -11,6 +11,7 @@ import (
 	"github.com/galihrivanto/runner"
 	"github.com/spf13/cobra"
 
+	_ "github.com/galihrivanto/kotak/module/http"
 	_ "github.com/galihrivanto/kotak/module/smtp"
 )
 
@@ -27,6 +28,7 @@ var ServerCmd = &cobra.Command{
 			return module.Start(ctx, c, db)
 		}).Handle(func(sig os.Signal) {
 			if sig == os.Interrupt {
+				fmt.Println("\nStopping server")
 				module.Stop()
 			}
 		})

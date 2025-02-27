@@ -29,7 +29,7 @@ database:
 http_server:
   port: "8080"
   host: localhost
-  ssl: false
+  tls: true
   cert_file: cert.pem
   key_file: key.pem
 smtp_server:
@@ -50,7 +50,7 @@ smtp_server:
 				HttpServer: HttpServer{
 					Port:     "8080",
 					Host:     "localhost",
-					SSL:      false,
+					TLS:      true,
 					CertFile: "cert.pem",
 					KeyFile:  "key.pem",
 				},
@@ -101,7 +101,7 @@ smtp_server:
 
 			assert.Equal(t, tc.expected.HttpServer.Port, config.HttpServer.Port)
 			assert.Equal(t, tc.expected.HttpServer.Host, config.HttpServer.Host)
-			assert.Equal(t, tc.expected.HttpServer.SSL, config.HttpServer.SSL)
+			assert.Equal(t, tc.expected.HttpServer.TLS, config.HttpServer.TLS)
 			assert.Equal(t, tc.expected.HttpServer.CertFile, config.HttpServer.CertFile)
 			assert.Equal(t, tc.expected.HttpServer.KeyFile, config.HttpServer.KeyFile)
 
