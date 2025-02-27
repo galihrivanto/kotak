@@ -17,6 +17,7 @@ func (s *Server) createAccount(c echo.Context) error {
 
 	// Store in database
 	if err := s.db.CreateAccount(accountID); err != nil {
+		fmt.Println("Failed to create account", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Failed to create account",
 		})
@@ -35,6 +36,7 @@ func (s *Server) getEmails(c echo.Context) error {
 	// Check if account exists
 	exists, err := s.db.AccountExists(accountID)
 	if err != nil || !exists {
+		fmt.Println("Failed to check if account exists", err)
 		return c.JSON(http.StatusNotFound, map[string]string{
 			"error": "Account not found",
 		})

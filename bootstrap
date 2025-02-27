@@ -9,3 +9,6 @@ echo "Installing server dependencies..."
 go mod download
 echo "Building server..."
 go build -o kotak
+
+echo "Building frontend..."
+npm --prefix frontend run build

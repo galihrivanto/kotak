@@ -80,14 +80,14 @@ func New(cfg config.Database) (*DB, error) {
 
 // CreateAccount creates a new temporary email account
 func (db *DB) CreateAccount(id string) error {
-	_, err := db.Exec("INSERT INTO accounts (id) VALUES (?)", id)
+	_, err := db.Exec("INSERT INTO accounts (id) VALUES ($1)", id)
 	return err
 }
 
 // GetAccount retrieves an account by ID
 func (db *DB) GetAccount(id string) (*Account, error) {
 	var account Account
-	err := db.QueryRow("SELECT id, created_at FROM accounts WHERE id = ?", id).Scan(&account.ID, &account.CreatedAt)
+	err := db.QueryRow("SELECT id, created_at FROM accounts WHERE id = $1", id).Scan(&account.ID, &account.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (db *DB) GetAccount(id string) (*Account, error) {
 // StoreEmail stores a new email in the database
 func (db *DB) StoreEmail(accountID, from, to, subject, body string) (int64, error) {
 	res, err := db.Exec(
-		"INSERT INTO emails (account_id, from_email, to_email, subject, body) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO emails (account_id, from_email, to_email, subject, body) VALUES ($1, $2, $3, $4, $5)",
 		accountID, from, to, subject, body,
 	)
 	if err != nil {
@@ -111,7 +111,7 @@ func (db *DB) GetEmails(accountID string) ([]Email, error) {
 	rows, err := db.Query(`
 		SELECT id, account_id, from_email, to_email, subject, body, received_at 
 		FROM emails 
-		WHERE account_id = ? 
+		WHERE account_id = $1 
 		ORDER BY received_at DESC`, accountID)
 	if err != nil {
 		return nil, err
@@ -136,7 +136,7 @@ func (db *DB) GetEmail(id int64, accountID string) (*Email, error) {
 	err := db.QueryRow(`
 		SELECT id, account_id, from_email, to_email, subject, body, received_at 
 		FROM emails 
-		WHERE id = ? AND account_id = ?`, id, accountID).
+		WHERE id = $1 AND account_id = $2`, id, accountID).
 		Scan(&email.ID, &email.AccountID, &email.From, &email.To, &email.Subject, &email.Body, &email.ReceivedAt)
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func (db *DB) GetEmail(id int64, accountID string) (*Email, error) {
 // AccountExists checks if an account exists
 func (db *DB) AccountExists(id string) (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM accounts WHERE id = ?", id).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM accounts WHERE id = $1", id).Scan(&count)
 	if err != nil {
 		return false, err
 	}
