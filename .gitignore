@@ -11,3 +11,4 @@ docker/.data
 frontend/dist
 frontend/tsconfig.tsbuildinfo
 node_modules
+.vite

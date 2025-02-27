@@ -1,6 +1,7 @@
 import React from 'react';
 import EmailListItem from './EmailListItem';
 import { InboxSectionProps } from '../types';
+import { Icon } from '@iconify/react';
 
 const InboxSection: React.FC<InboxSectionProps> = ({ 
   emails, 
@@ -17,7 +18,7 @@ const InboxSection: React.FC<InboxSectionProps> = ({
           onClick={onRefresh} 
           disabled={isLoading}
         >
-          {isLoading ? 'Refreshing...' : 'Refresh'}
+          {isLoading ? <Icon icon="mdi:loading" style={{ fontSize: '1.25rem' }} /> : <Icon icon="mdi:refresh" style={{ fontSize: '1.25rem' }} />}
         </button>
       </div>
       
