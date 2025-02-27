@@ -33,4 +33,21 @@ var ServerCmd = &cobra.Command{
 			}
 		})
 	},
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		c := config.FromContext(cmd.Context())
+
+		// setup database
+		fmt.Println("Setting up database...")
+		dbInstance, err := db.New(c.Database)
+		if err != nil {
+			cmd.Print(err)
+			os.Exit(1)
+		}
+		cmd.SetContext(db.WithContext(cmd.Context(), dbInstance))
+	},
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		// teardown database
+		fmt.Println("Closing database...")
+		db.FromContext(cmd.Context()).Close()
+	},
 }
