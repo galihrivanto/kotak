@@ -13,6 +13,12 @@ body {
     flex-direction: column;
     gap: 20px;
   }
+
+  .container .main-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   
   .card {
     border: 1px solid #ddd;
@@ -81,10 +87,6 @@ body {
     cursor: not-allowed;
   }
   
-  .copy-btn {
-    background-color: #2196F3;
-  }
-  
   .copy-btn:hover {
     background-color: #0b7dda;
   }
@@ -93,14 +95,26 @@ body {
     background-color: #90caf9;
   }
   
+  .email-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
   .email-address {
     font-weight: bold;
     font-size: 1.2em;
-    margin: 10px 0;
     padding: 10px;
     background-color: #f0f8ff;
     border-radius: 4px;
     border-left: 3px solid #2196F3;
+    margin: 0;
+    flex: 1;
+  }
+  
+  .copy-btn {
+    flex-shrink: 0;
   }
   
   .loading {

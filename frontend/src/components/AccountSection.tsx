@@ -1,5 +1,6 @@
 import React from 'react';
 import { AccountSectionProps } from '../types';
+import { Icon } from '@iconify/react';
 
 const AccountSection: React.FC<AccountSectionProps> = ({ 
   currentAccount, 
@@ -19,17 +20,18 @@ const AccountSection: React.FC<AccountSectionProps> = ({
         <div id="email-display">
           {currentAccount ? (
             <>
-              <p>Your temporary email address is:</p>
+            <div className="email-container">
               <p className="email-address">{currentAccount.email}</p>
               <button 
                 className="copy-btn" 
                 onClick={() => copyToClipboard(currentAccount.email)}
                 disabled={isLoading}
               >
-                Copy to Clipboard
+                <Icon icon="mdi:content-copy" style={{ fontSize: '1.25rem' }} />
               </button>
-              <p><small>This email will be active for this session only.</small></p>
-            </>
+            </div>
+            <p><small>This email will be active for this session only.</small></p>
+          </>
           ) : (
             <>
               <p>You don't have a temporary email yet. Generate one to get started.</p>
