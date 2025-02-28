@@ -3,6 +3,12 @@ import { Account, EmailsResponse, EmailDetailResponse } from '../types';
 const API_BASE_URL = import.meta.env.VITE_API_HOST + import.meta.env.VITE_API_BASE;
 
 export const emailService = {
+  // Check if an account exists
+  checkAccount: async (accountId: string): Promise<boolean> => {
+    const response = await fetch(`${API_BASE_URL}/accounts/${accountId}`);
+    return response.ok;
+  },
+
   // Generate a new temporary email account
   generateEmailAccount: async (): Promise<Account> => {
     const response = await fetch(`${API_BASE_URL}/accounts`, {

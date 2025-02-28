@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -60,12 +61,19 @@ type SmtpServer struct {
 	MaxSize  int    `mapstructure:"max_size" yaml:"max_size"`
 }
 
+// Inbox is the configuration for the inbox setting
+type Inbox struct {
+	CleanupInterval time.Duration `mapstructure:"cleanup_interval" yaml:"cleanup_interval"`
+	MaxAge          time.Duration `mapstructure:"max_age" yaml:"max_age"`
+}
+
 // Config is the configuration for the application
 type Config struct {
 	Database   Database   `mapstructure:"database" yaml:"database"`
 	HttpServer HttpServer `mapstructure:"http_server" yaml:"http_server"`
 	SmtpServer SmtpServer `mapstructure:"smtp_server" yaml:"smtp_server"`
 	Logger     Logger     `mapstructure:"logger" yaml:"logger"`
+	Inbox      Inbox      `mapstructure:"inbox" yaml:"inbox"`
 }
 
 // Load loads the configuration from the given viper instance

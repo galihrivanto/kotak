@@ -3,12 +3,12 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"net/smtp"
 	"os"
 	"strings"
 
 	"github.com/galihrivanto/kotak/config"
+	"github.com/galihrivanto/kotak/log"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var SendEmailCmd = &cobra.Command{
 		subject := promptInput("Subject: ")
 		body := promptInput("Body: ")
 
-		fmt.Printf(`Sending email to "%s" with subject "%s" and body "%s"\n`, email, subject, body)
+		log.Info(`Sending email to "%s" with subject "%s" and body "%s"\n`, email, subject, body)
 
 		config := config.FromContext(cmd.Context())
 
@@ -38,10 +38,10 @@ var SendEmailCmd = &cobra.Command{
 			msg,
 		)
 		if err != nil {
-			log.Fatal(err)
+			log.Error("Failed to send email: %v", err)
 		}
 
-		fmt.Println("Email sent successfully")
+		log.Info("Email sent successfully")
 	},
 }
 

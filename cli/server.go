@@ -2,16 +2,17 @@ package cli
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"github.com/galihrivanto/kotak/config"
 	"github.com/galihrivanto/kotak/db"
+	"github.com/galihrivanto/kotak/log"
 	"github.com/galihrivanto/kotak/module"
 	"github.com/galihrivanto/runner"
 	"github.com/spf13/cobra"
 
 	_ "github.com/galihrivanto/kotak/module/http"
+	_ "github.com/galihrivanto/kotak/module/inbox"
 	_ "github.com/galihrivanto/kotak/module/smtp"
 )
 
@@ -19,7 +20,7 @@ var ServerCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Start the server",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Server started")
+		log.Info("Server started")
 
 		c := config.FromContext(cmd.Context())
 		db := db.FromContext(cmd.Context())
@@ -28,16 +29,16 @@ var ServerCmd = &cobra.Command{
 			return module.Start(ctx, c, db)
 		}).Handle(func(sig os.Signal) {
 			if sig == os.Interrupt {
-				fmt.Println("\nStopping server")
+				log.Info("\nStopping server")
 				module.Stop()
 			}
 		})
 	},
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PreRun: func(cmd *cobra.Command, args []string) {
 		c := config.FromContext(cmd.Context())
 
 		// setup database
-		fmt.Println("Setting up database...")
+		log.Info("Setting up database...")
 		dbInstance, err := db.New(c.Database)
 		if err != nil {
 			cmd.Print(err)
@@ -45,9 +46,9 @@ var ServerCmd = &cobra.Command{
 		}
 		cmd.SetContext(db.WithContext(cmd.Context(), dbInstance))
 	},
-	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+	PostRun: func(cmd *cobra.Command, args []string) {
 		// teardown database
-		fmt.Println("Closing database...")
+		log.Info("Closing database...")
 		db.FromContext(cmd.Context()).Close()
 	},
 }
