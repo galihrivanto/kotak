@@ -3,12 +3,12 @@ package smtp
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"strings"
 
 	"github.com/galihrivanto/kotak/config"
 	"github.com/galihrivanto/kotak/db"
+	"github.com/galihrivanto/kotak/log"
 	"github.com/galihrivanto/kotak/module"
 
 	"github.com/mhale/smtpd"
@@ -31,16 +31,16 @@ func (s *Server) Start(ctx context.Context) error {
 		addr := fmt.Sprintf("%s:%s", s.config.SmtpServer.Host, s.config.SmtpServer.Port)
 		ln, err := net.Listen("tcp", addr)
 		if err != nil {
-			log.Printf("SMTP server listen error: %v", err)
+			log.Error("SMTP server listen error: %v", err)
 
 			return
 		}
 
-		fmt.Printf("\nSMTP server listening on %s", addr)
+		log.Info("\nSMTP server listening on %s", addr)
 
 		err = s.srv.Serve(ln)
 		if err != nil {
-			log.Printf("SMTP server error: %v", err)
+			log.Error("SMTP server error: %v", err)
 		}
 	}()
 
@@ -48,7 +48,7 @@ func (s *Server) Start(ctx context.Context) error {
 }
 
 func (s *Server) Close() error {
-	fmt.Println("Stopping SMTP server")
+	log.Info("Stopping SMTP server")
 	// stop server
 	s.cancel()
 
@@ -57,7 +57,7 @@ func (s *Server) Close() error {
 
 // handleMail processes incoming emails
 func (s *Server) handleMail(_ net.Addr, from string, to []string, data []byte) error {
-	log.Printf("Received mail from %s to %v", from, to)
+	log.Info("Received mail from %s to %v", from, to)
 
 	// Extract email components
 	body := string(data)
@@ -76,16 +76,16 @@ func (s *Server) handleMail(_ net.Addr, from string, to []string, data []byte) e
 		// Check if account exists
 		exists, err := s.db.AccountExists(accountID)
 		if err != nil || !exists {
-			log.Printf("Account %s not found, skipping email", accountID)
+			log.Error("Account %s not found, skipping email", accountID)
 			continue
 		}
 
 		// Store the email
 		_, err = s.db.StoreEmail(accountID, from, recipient, subject, body)
 		if err != nil {
-			log.Printf("Failed to store email: %v", err)
+			log.Error("Failed to store email: %v", err)
 		} else {
-			log.Printf("Stored email for account %s", accountID)
+			log.Info("Stored email for account %s", accountID)
 		}
 	}
 

@@ -6,9 +6,25 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/galihrivanto/kotak/log"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/exp/rand"
 )
+
+// checkAccount checks if an account exists
+func (s *Server) checkAccount(c echo.Context) error {
+	accountID := c.Param("id")
+	exists, err := s.db.AccountExists(accountID)
+	if err != nil || !exists {
+		return c.JSON(http.StatusNotFound, map[string]string{
+			"error": "Account not found or deleted",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"exists": exists,
+	})
+}
 
 // createAccount handles the creation of new temporary email accounts
 func (s *Server) createAccount(c echo.Context) error {
@@ -17,7 +33,7 @@ func (s *Server) createAccount(c echo.Context) error {
 
 	// Store in database
 	if err := s.db.CreateAccount(accountID); err != nil {
-		fmt.Println("Failed to create account", err)
+		log.Error("Failed to create account %s: %v", accountID, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Failed to create account",
 		})
@@ -71,6 +87,7 @@ func (s *Server) getEmail(c echo.Context) error {
 	// Get email from database
 	email, err := s.db.GetEmail(emailID, accountID)
 	if err != nil {
+		log.Error("Failed to get email %d for account %s: %v", emailID, accountID, err)
 		return c.JSON(http.StatusNotFound, map[string]string{
 			"error": "Email not found",
 		})

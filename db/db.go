@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/galihrivanto/kotak/config"
+	"github.com/galihrivanto/kotak/log"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 )
@@ -39,7 +40,7 @@ type Account struct {
 
 // New initializes the database
 func New(cfg config.Database) (*DB, error) {
-	fmt.Println("Initializing database...")
+	log.Info("Initializing database...")
 	db, err := sql.Open(cfg.Driver, cfg.DSN())
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func New(cfg config.Database) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Database version:", version)
+	log.Info("Database version: %s", version)
 
 	// Create tables if they don't exist
 	_, err = db.Exec(`
@@ -59,6 +60,7 @@ func New(cfg config.Database) (*DB, error) {
 			id TEXT PRIMARY KEY,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
+
 		CREATE TABLE IF NOT EXISTS emails (
 			id SERIAL PRIMARY KEY,
 			account_id TEXT,
@@ -67,7 +69,7 @@ func New(cfg config.Database) (*DB, error) {
 			subject TEXT,
 			body TEXT,
 			received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (account_id) REFERENCES accounts(id)
+			FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 		);
 	`)
 	if err != nil {
@@ -152,6 +154,12 @@ func (db *DB) AccountExists(id string) (bool, error) {
 		return false, err
 	}
 	return count > 0, nil
+}
+
+// Cleanup deletes emails older than given interval
+func (db *DB) Cleanup(hours int) error {
+	_, err := db.Exec(fmt.Sprintf("DELETE FROM accounts WHERE created_at < NOW() - INTERVAL '%d hour' CASCADE", hours))
+	return err
 }
 
 // Close closes the database

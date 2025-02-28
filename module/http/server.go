@@ -3,12 +3,11 @@ package http
 import (
 	"context"
 	"fmt"
-	"log"
-	"net/http"
 	"path/filepath"
 
 	"github.com/galihrivanto/kotak/config"
 	"github.com/galihrivanto/kotak/db"
+	"github.com/galihrivanto/kotak/log"
 	"github.com/galihrivanto/kotak/module"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -26,20 +25,20 @@ func (s *Server) Start(ctx context.Context) error {
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	address := fmt.Sprintf("%s:%s", s.cfg.HttpServer.Host, s.cfg.HttpServer.Port)
 
-	fmt.Println("Setup API with base API", s.cfg.HttpServer.APIBase)
+	log.Info("Setup API with base API %s", s.cfg.HttpServer.APIBase)
 	s.setupAPI()
 
-	fmt.Println("Setup Static with static URL", s.cfg.HttpServer.StaticURL)
+	log.Info("Setup Static with static URL %s", s.cfg.HttpServer.StaticURL)
 	s.setupStatic()
 
 	go func() {
 		if s.cfg.HttpServer.TLS {
 			if err := s.srv.StartTLS(address, s.cfg.HttpServer.CertFile, s.cfg.HttpServer.KeyFile); err != nil {
-				log.Fatalf("Failed to start HTTP server: %v", err)
+				log.Fatal("Failed to start HTTP server: %v", err)
 			}
 		} else {
 			if err := s.srv.Start(address); err != nil {
-				log.Fatalf("Failed to start HTTP server: %v", err)
+				log.Fatal("Failed to start HTTP server: %v", err)
 			}
 		}
 	}()
@@ -62,7 +61,7 @@ func (s *Server) setupStatic() {
 }
 
 func (s *Server) Close() error {
-	fmt.Println("Stopping HTTP server")
+	log.Info("Stopping HTTP server")
 	s.cancel()
 	return s.srv.Shutdown(s.ctx)
 }
@@ -71,14 +70,11 @@ func NewServer(cfg *config.Config, db *db.DB) *Server {
 	svc := &Server{cfg: cfg, db: db}
 
 	svc.srv = echo.New()
+	svc.srv.HideBanner = true
 
 	svc.srv.Use(middleware.Logger())
 	svc.srv.Use(middleware.Recover())
 	svc.srv.Use(middleware.CORS())
-
-	svc.srv.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
 
 	return svc
 }

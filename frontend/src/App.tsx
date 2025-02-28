@@ -13,18 +13,28 @@ const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    const checkAccount = useCallback(async (accountId: string): Promise<void> => {
+        const exists = await emailService.checkAccount(accountId);
+        if (!exists) {
+            setCurrentAccount(null);
+            localStorage.removeItem('tempEmailAccount');
+        }
+    }, []);
+
     // Check for existing account in localStorage on component mount
     useEffect(() => {
         const savedAccount = localStorage.getItem('tempEmailAccount');
         if (savedAccount) {
             try {
-                setCurrentAccount(JSON.parse(savedAccount));
+                const account = JSON.parse(savedAccount);
+                setCurrentAccount(account);
+                checkAccount(account.account_id); 
             } catch (e) {
                 console.error('Error parsing saved account:', e);
                 localStorage.removeItem('tempEmailAccount');
             }
         }
-    }, []);
+    }, [checkAccount]);
 
     // Fetch emails for the current account
     const fetchEmails = useCallback(async (): Promise<void> => {

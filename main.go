@@ -6,6 +6,7 @@ import (
 
 	"github.com/galihrivanto/kotak/cli"
 	"github.com/galihrivanto/kotak/config"
+	"github.com/galihrivanto/kotak/log"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +26,9 @@ func main() {
 		fmt.Println("Loading configuration...")
 		c := config.Load(rootCmd.Flag("config").Value.String())
 		cmd.SetContext(config.WithContext(cmd.Context(), c))
+
+		// setup logger
+		log.Configure(c.Logger)
 
 	}
 
