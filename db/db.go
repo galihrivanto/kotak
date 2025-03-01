@@ -82,14 +82,14 @@ func New(cfg config.Database) (*DB, error) {
 
 // CreateAccount creates a new temporary email account
 func (db *DB) CreateAccount(id string) error {
-	_, err := db.Exec("INSERT INTO accounts (id) VALUES ($1)", id)
+	_, err := db.DB.Exec("INSERT INTO accounts (id) VALUES ($1)", id)
 	return err
 }
 
 // GetAccount retrieves an account by ID
 func (db *DB) GetAccount(id string) (*Account, error) {
 	var account Account
-	err := db.QueryRow("SELECT id, created_at FROM accounts WHERE id = $1", id).Scan(&account.ID, &account.CreatedAt)
+	err := db.DB.QueryRow("SELECT id, created_at FROM accounts WHERE id = $1", id).Scan(&account.ID, &account.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (db *DB) GetAccount(id string) (*Account, error) {
 
 // StoreEmail stores a new email in the database
 func (db *DB) StoreEmail(accountID, from, to, subject, body string) (int64, error) {
-	res, err := db.Exec(
+	res, err := db.DB.Exec(
 		"INSERT INTO emails (account_id, from_email, to_email, subject, body) VALUES ($1, $2, $3, $4, $5)",
 		accountID, from, to, subject, body,
 	)
@@ -110,7 +110,7 @@ func (db *DB) StoreEmail(accountID, from, to, subject, body string) (int64, erro
 
 // GetEmails retrieves all emails for an account
 func (db *DB) GetEmails(accountID string) ([]Email, error) {
-	rows, err := db.Query(`
+	rows, err := db.DB.Query(`
 		SELECT id, account_id, from_email, to_email, subject, body, received_at 
 		FROM emails 
 		WHERE account_id = $1 
@@ -135,7 +135,7 @@ func (db *DB) GetEmails(accountID string) ([]Email, error) {
 // GetEmail retrieves a specific email
 func (db *DB) GetEmail(id int64, accountID string) (*Email, error) {
 	var email Email
-	err := db.QueryRow(`
+	err := db.DB.QueryRow(`
 		SELECT id, account_id, from_email, to_email, subject, body, received_at 
 		FROM emails 
 		WHERE id = $1 AND account_id = $2`, id, accountID).
@@ -149,7 +149,7 @@ func (db *DB) GetEmail(id int64, accountID string) (*Email, error) {
 // AccountExists checks if an account exists
 func (db *DB) AccountExists(id string) (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM accounts WHERE id = $1", id).Scan(&count)
+	err := db.DB.QueryRow("SELECT COUNT(*) FROM accounts WHERE id = $1", id).Scan(&count)
 	if err != nil {
 		return false, err
 	}
@@ -158,7 +158,7 @@ func (db *DB) AccountExists(id string) (bool, error) {
 
 // Cleanup deletes emails older than given interval
 func (db *DB) Cleanup(hours int) error {
-	_, err := db.Exec(fmt.Sprintf("DELETE FROM accounts WHERE created_at < NOW() - INTERVAL '%d hour' CASCADE", hours))
+	_, err := db.DB.Exec(fmt.Sprintf("DELETE FROM accounts WHERE created_at < NOW() - INTERVAL '%d hour'", hours))
 	return err
 }
 

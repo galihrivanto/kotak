@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/galihrivanto/kotak/log"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 	"golang.org/x/exp/rand"
 )
 

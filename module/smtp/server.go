@@ -36,7 +36,7 @@ func (s *Server) Start(ctx context.Context) error {
 			return
 		}
 
-		log.Info("\nSMTP server listening on %s", addr)
+		log.Info("SMTP server listening on %s", addr)
 
 		err = s.srv.Serve(ln)
 		if err != nil {

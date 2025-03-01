@@ -1,6 +1,11 @@
 linters:
+  disable-all: true
   enable:
-    - gosimple
+    - gofmt
+    - goimports
     - govet
-    - staticcheck
     - errcheck
+
+run:
+  exclude-dirs:
+    - vendor
