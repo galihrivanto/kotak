@@ -13,7 +13,7 @@ http_server:
   key_file: key.pem
   api_host: http://localhost:8080
   api_base: /api
-  static_url: /static
+  static_url: /
   static_dir: ./frontend/dist
 smtp_server:
   hostname: kotak.com
@@ -21,3 +21,9 @@ smtp_server:
   port: 2525
   username: kotak
   password: kotak
+inbox:
+  cleanup_interval: 1m
+  max_age: 24h
+logger:
+  format: text
+  level: info

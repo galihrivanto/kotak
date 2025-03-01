@@ -30,7 +30,9 @@ var ServerCmd = &cobra.Command{
 		}).Handle(func(sig os.Signal) {
 			if sig == os.Interrupt {
 				log.Info("\nStopping server")
-				module.Stop()
+				if err := module.Stop(); err != nil {
+					log.Error("Failed to stop modules: %v", err)
+				}
 			}
 		})
 	},

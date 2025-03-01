@@ -9,7 +9,7 @@ import (
 	"github.com/galihrivanto/kotak/db"
 	"github.com/galihrivanto/kotak/log"
 	"github.com/galihrivanto/kotak/module"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -51,13 +51,16 @@ func (s *Server) setupAPI() {
 
 	// Account routes
 	api.POST("/accounts", s.createAccount)
+	api.GET("/accounts/:id", s.checkAccount)
 	api.GET("/accounts/:id/emails", s.getEmails)
 	api.GET("/accounts/:id/emails/:email_id", s.getEmail)
 }
 
 func (s *Server) setupStatic() {
 	s.srv.Static(s.cfg.HttpServer.StaticURL, s.cfg.HttpServer.StaticDir)
-	s.srv.Static("/", filepath.Join(s.cfg.HttpServer.StaticDir, "index.html"))
+	s.srv.GET("/", func(c echo.Context) error {
+		return c.File(filepath.Join(s.cfg.HttpServer.StaticDir, "index.html"))
+	})
 }
 
 func (s *Server) Close() error {
