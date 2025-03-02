@@ -38,3 +38,41 @@ go build -o kotak
 npm --prefix frontend run dev
 ```
 
+### Database
+
+Example config for database
+
+#### PostgreSQL
+
+```yaml
+database:
+  driver: postgres
+  host: localhost
+  port: 5432
+  username: kotak
+  password: kotak
+  database: kotak
+```
+
+#### MySQL
+
+```yaml
+database:
+  driver: mysql
+  host: localhost
+  port: 3306
+  username: kotak
+  password: kotak
+  database: kotak
+```
+
+#### SQLite
+
+```yaml
+database:
+  driver: sqlite
+  database: kotak
+```
+
+
+
