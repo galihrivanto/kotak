@@ -30,6 +30,10 @@ type Database struct {
 }
 
 func (d Database) DSN() string {
+	if d.Driver == "sqlite" {
+		return fmt.Sprintf("%s.db", d.Database)
+	}
+
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", d.Host, d.Port, d.Username, d.Password, d.Database)
 }
 

@@ -1,5 +1,6 @@
 # binaries
 kotak
+*.db
 
 # config
 config.yaml
