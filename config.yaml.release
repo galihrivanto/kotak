@@ -1,12 +1,10 @@
 database:
-  driver: postgres
+  driver: sqlite
   database: kotak
 http_server:
   port: "8080"
   host: localhost
   ssl: false
-  cert_file: cert.pem
-  key_file: key.pem
   api_host: http://localhost:8080
   api_base: /api
   static_url: /

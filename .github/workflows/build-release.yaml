@@ -78,10 +78,15 @@ jobs:
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
+
+      - name: Fix permissions
+        run: chmod +x kotak-linux-amd64/kotak
 
       - name: Prepare release assets
         run: |
