@@ -60,7 +60,7 @@ jobs:
           cp config.yaml.release config.yaml
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: kotak-${{ matrix.goos }}-${{ matrix.goarch }}
           path: |
@@ -75,7 +75,7 @@ jobs:
     
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Prepare release assets
         run: |
