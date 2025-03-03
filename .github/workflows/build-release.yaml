@@ -36,6 +36,10 @@ jobs:
         run: |
           npm --prefix frontend install
 
+    - name: Generate config.yaml
+        run: |
+          cp config.yaml.release config.yaml
+
       - name: Build Frontend
         run: |
           npm --prefix frontend run build
@@ -54,10 +58,6 @@ jobs:
       - name: Copy frontend assets
         run: |
           cp -r frontend/dist assets
-
-      - name: Generate config.yaml
-        run: |
-          cp config.yaml.release config.yaml
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
