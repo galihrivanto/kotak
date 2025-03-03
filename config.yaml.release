@@ -1,0 +1,25 @@
+database:
+  driver: postgres
+  database: kotak
+http_server:
+  port: "8080"
+  host: localhost
+  ssl: false
+  cert_file: cert.pem
+  key_file: key.pem
+  api_host: http://localhost:8080
+  api_base: /api
+  static_url: /
+  static_dir: ./assets
+smtp_server:
+  hostname: kotak.com
+  host: localhost
+  port: 2525
+  username: kotak
+  password: kotak
+inbox:
+  cleanup_interval: 1m
+  max_age: 24h
+logger:
+  format: text
+  level: info

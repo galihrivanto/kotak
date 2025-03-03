@@ -1,0 +1,92 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows]
+        goarch: [amd64]
+        include:
+          - goos: windows
+            extension: .exe
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build Frontend
+        run: |
+          npm --prefix frontend run build
+
+      - name: Run Golang linter
+        run: |
+          golangci-lint run
+
+      - name: Build Server
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -v -o kotak${{ matrix.extension }}
+
+      - name: Copy frontend assets
+        run: |
+          cp -r frontend/dist assets
+
+      - name: Generate config.yaml
+        run: |
+          cp config.yaml.release config.yaml
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kotak-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: |
+            kotak${{ matrix.extension }}
+            assets/
+            config.yaml
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Prepare release assets
+        run: |
+          cd kotak-linux-amd64 && zip -r ../kotak-linux-amd64.zip kotak assets config.yaml && cd ..
+          cd kotak-windows-amd64 && zip -r ../kotak-windows-amd64.zip kotak.exe assets config.yaml && cd ..
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            kotak-linux-amd64.zip
+            kotak-windows-amd64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

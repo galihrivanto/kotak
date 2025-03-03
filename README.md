@@ -74,5 +74,20 @@ database:
   database: kotak
 ```
 
+### Example Config
+
+Or you can copy from example config
+
+```bash
+cp config.yaml.example_sqlite config.yaml
+```
+
+or
+
+```bash
+cp config.yaml.example_postgres config.yaml
+```
+
+
 
 
