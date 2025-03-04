@@ -84,6 +84,11 @@ const App: React.FC = () => {
         setSelectedEmailId(emailId);
     };
 
+    // Add this new function to close email detail
+    const closeEmailDetail = (): void => {
+        setSelectedEmailId(null);
+    };
+
     return (
         <div className="container">
             <div className="main-header">
@@ -100,20 +105,27 @@ const App: React.FC = () => {
             />
 
             {currentAccount && (
-                <InboxSection
-                    emails={currentEmails}
-                    onRefresh={fetchEmails}
-                    onSelectEmail={viewEmail}
-                    selectedEmailId={selectedEmailId}
-                    isLoading={isLoading}
-                />
-            )}
+                <div className={`content-wrapper ${selectedEmailId ? 'with-detail' : ''}`}>
+                    <div className="inbox-container">
+                        <InboxSection
+                            emails={currentEmails}
+                            onRefresh={fetchEmails}
+                            onSelectEmail={viewEmail}
+                            selectedEmailId={selectedEmailId}
+                            isLoading={isLoading}
+                        />
+                    </div>
 
-            {selectedEmailId && (
-                <EmailDetailSection
-                    accountId={currentAccount?.account_id}
-                    emailId={selectedEmailId}
-                />
+                    <div className={`email-detail-container ${selectedEmailId ? 'open' : ''}`}>
+                        {selectedEmailId && (
+                            <EmailDetailSection
+                                accountId={currentAccount?.account_id}
+                                emailId={selectedEmailId}
+                                onClose={closeEmailDetail}
+                            />
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );

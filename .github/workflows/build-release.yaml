@@ -59,7 +59,7 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          go build -v -o kotak${{ matrix.extension }}
+          go build -v -ldflags "-s -w" -o kotak${{ matrix.extension }}
 
       - name: Copy frontend assets
         run: |

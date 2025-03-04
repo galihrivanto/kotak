@@ -27,7 +27,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({
                 onClick={() => copyToClipboard(currentAccount.email)}
                 disabled={isLoading}
               >
-                <Icon icon="mdi:content-copy" style={{ fontSize: '1.25rem' }} />
+                <Icon icon="mdi:content-copy" style={{ fontSize: '1rem' }} />
               </button>
             </div>
             <p><small>This email will be active for this session only.</small></p>

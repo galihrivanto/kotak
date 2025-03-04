@@ -1,170 +1,223 @@
 body {
-    font-family: Arial, sans-serif;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f7f7f7;
-  }
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f7f7f7;
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
   }
 
-  .container .main-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
   .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    background-color: #fff;
-  }
-  
-  .email-list {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .email-item {
     padding: 15px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
   }
-  
-  .email-item:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .email-item.active {
-    background-color: #e0f0ff;
-    border-left: 3px solid #2196F3;
-  }
-  
-  .email-detail {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-  }
-  
-  .email-content {
-    white-space: pre-wrap;
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    line-height: 1.6;
-  }
-  
-  button {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 5px;
-    transition: background-color 0.2s ease;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  .copy-btn:hover {
-    background-color: #0b7dda;
-  }
-  
-  .copy-btn:disabled {
-    background-color: #90caf9;
-  }
-  
-  .email-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  
-  .email-address {
-    font-weight: bold;
-    font-size: 1.2em;
-    padding: 10px;
-    background-color: #f0f8ff;
-    border-radius: 4px;
-    border-left: 3px solid #2196F3;
-    margin: 0;
-    flex: 1;
-  }
-  
-  .copy-btn {
-    flex-shrink: 0;
-  }
-  
-  .loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-  }
-  
-  .error {
-    color: #d32f2f;
-    padding: 10px;
-    border: 1px solid #d32f2f;
-    border-radius: 4px;
-    background-color: #ffebee;
-  }
-  
-  .error-banner {
-    background-color: #ffebee;
-    color: #d32f2f;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    border-left: 4px solid #d32f2f;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  h1 {
-    color: #2c3e50;
-    margin-bottom: 30px;
-  }
-  
-  h2 {
-    color: #3498db;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-top: 0;
-  }
-  
-  @media (max-width: 768px) {
-    body {
-      padding: 10px;
-    }
-    
-    .card {
-      padding: 15px;
-    }
-  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container .main-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.email-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.email-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.email-item:hover {
+  background-color: #f5f5f5;
+}
+
+.email-item.active {
+  background-color: #e0f0ff;
+  border-left: 3px solid #2196F3;
+}
+
+.email-detail {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.email-content {
+  white-space: pre-wrap;
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  line-height: 1.6;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.copy-btn:hover {
+  background-color: #0b7dda;
+}
+
+.copy-btn:disabled {
+  background-color: #90caf9;
+}
+
+.email-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.email-address {
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 10px;
+  background-color: #f0f8ff;
+  border-radius: 4px;
+  border-left: 3px solid #2196F3;
+  margin: 0;
+  flex: 1;
+}
+
+.content-wrapper {
+  display: flex;
+  position: relative;
+  height: calc(100vh - 436px);
+  overflow: hidden;
+}
+
+.inbox-container {
+  flex: 1;
+  min-width: 0;
+  transition: all 0.3s ease;
+}
+
+.content-wrapper.with-detail .inbox-container {
+  flex: 0 0 30%;
+}
+
+.email-detail-container {
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 70%;
+  height: 100%;
+  overflow: auto;
+  transition: right 0.3s ease;
+}
+
+.email-detail-container.card {
+  height: 100%;
+}
+
+.email-detail-container.open {
+  right: 0;
+}
+
+.email-detail h3 {
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.email-detail p {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.error {
+  color: #d32f2f;
+  padding: 10px;
+  border: 1px solid #d32f2f;
+  border-radius: 4px;
+  background-color: #ffebee;
+}
+
+.error-banner {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border-left: 4px solid #d32f2f;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.header h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}

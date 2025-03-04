@@ -47,6 +47,8 @@ export interface Account {
   }
   
   export interface EmailDetailSectionProps {
-    accountId: string | undefined;
-    emailId: string | null;
+    accountId?: string;
+    emailId: string;
+    onClose: () => void;
   }
+  
