@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { emailService } from '../services/api';
 import { EmailDetailSectionProps, Email } from '../types';
+import { Icon } from '@iconify/react';
 
-const EmailDetailSection: React.FC<EmailDetailSectionProps> = ({ accountId, emailId }) => {
+const EmailDetailSection: React.FC<EmailDetailSectionProps> = ({ accountId, emailId, onClose }) => {
   const [emailDetail, setEmailDetail] = useState<Email | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -67,14 +68,18 @@ const EmailDetailSection: React.FC<EmailDetailSectionProps> = ({ accountId, emai
 
   return (
     <div className="card">
-      <h2>Email Details</h2>
+      <div className="header">
+        <h2>Email Details</h2>
+        <button className="icon-button" onClick={onClose}>
+          <Icon icon="mdi:close" style={{ fontSize: '1rem' }} />
+        </button>
+      </div>
       <div className="email-detail">
         <h3>{emailDetail.subject || '(No Subject)'}</h3>
         <p><strong>From:</strong> {emailDetail.from}</p>
         <p><strong>To:</strong> {emailDetail.to}</p>
         <p><strong>Received:</strong> {receivedDate}</p>
         <div className="email-content">
-          {/* Conditionally render as HTML if the content appears to be HTML, otherwise as text */}
           {isHtmlContent(emailDetail.body) ? 
             <div {...createMarkup(emailDetail.body)} /> : 
             emailDetail.body

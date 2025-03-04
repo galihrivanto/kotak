@@ -18,7 +18,7 @@ const InboxSection: React.FC<InboxSectionProps> = ({
           onClick={onRefresh} 
           disabled={isLoading}
         >
-          {isLoading ? <Icon icon="mdi:loading" style={{ fontSize: '1.25rem' }} /> : <Icon icon="mdi:refresh" style={{ fontSize: '1.25rem' }} />}
+          {isLoading ? <Icon icon="mdi:loading" style={{ fontSize: '1rem' }} /> : <Icon icon="mdi:refresh" style={{ fontSize: '1rem' }} />}
         </button>
       </div>
       
